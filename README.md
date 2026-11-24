@@ -7,7 +7,7 @@
 
 1. 打开 OpenChamber → **设置 → Extensions**。
 2. 选择 **从文件夹安装**，指向本目录：
-   `C:\Users\Lenovo\.config\openchamber\extensions-src\sensevoice-stt`
+   `%USERPROFILE%\.config\openchamber\extensions-src\sensevoice-stt`
 3. 安装时允许 **本地服务 (service)** 能力。
 4. 打开扩展面板可随时查看配置说明。
 
@@ -46,7 +46,7 @@
 编辑：
 
 ```
-C:\Users\Lenovo\.config\openchamber\guest-data\sensevoice-stt\config.json
+%USERPROFILE%\.config\openchamber\guest-data\sensevoice-stt\config.json
 ```
 
 支持字段：
@@ -54,8 +54,8 @@ C:\Users\Lenovo\.config\openchamber\guest-data\sensevoice-stt\config.json
 ```json
 {
   "port": 47831,
-  "modelDir": "C:\\Users\\Lenovo\\.claude\\cc-haha\\voice\\sensevoice\\models",
-  "sherpaRuntime": "C:\\Users\\Lenovo\\.claude\\cc-haha\\voice\\sensevoice\\runtime\\1.13.8\\node_modules",
+  "modelDir": "C:\\Users\\<you>\\.claude\\cc-haha\\voice\\sensevoice\\models",
+  "sherpaRuntime": "C:\\Users\\<you>\\.claude\\cc-haha\\voice\\sensevoice\\runtime\\1.13.8\\node_modules",
   "threads": 2,
   "language": "auto",
   "idleUnloadMs": 300000
