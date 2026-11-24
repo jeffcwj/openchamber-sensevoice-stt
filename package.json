@@ -1,0 +1,25 @@
+{
+  "name": "openchamber-sensevoice-stt",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenChamber extension: a local OpenAI-compatible STT server that runs the SenseVoice Small (INT8) model already downloaded by cc-haha.",
+  "openchamber": {
+    "apiVersion": 1,
+    "engines": { "openchamber": ">=2.0.0" },
+    "contributes": {
+      "panel": {
+        "id": "sensevoice-stt",
+        "name": "SenseVoice STT",
+        "icon": "mic-line",
+        "entry": "panel/index.html"
+      },
+      "service": {
+        "entry": "service/main.js",
+        "runtime": "host",
+        "keepRunning": true,
+        "permissions": {}
+      }
+    }
+  }
+}

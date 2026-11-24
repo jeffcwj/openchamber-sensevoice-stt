@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SenseVoice STT</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --sv-fg: var(--oc-fg, #1f2328);
+        --sv-muted: var(--oc-muted, #6b7280);
+        --sv-border: var(--oc-border, #e5e7eb);
+        --sv-surface: var(--oc-muted-surface, rgba(0, 0, 0, 0.035));
+        --sv-bg: var(--oc-bg, #ffffff);
+        --sv-accent: #2563eb;
+        --sv-radius: var(--oc-radius, 10px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --sv-fg: var(--oc-fg, #e8e8e8);
+          --sv-muted: var(--oc-muted, #9aa0a6);
+          --sv-border: var(--oc-border, #3a3a3a);
+          --sv-surface: var(--oc-muted-surface, rgba(255, 255, 255, 0.05));
+          --sv-bg: var(--oc-bg, #1b1b1b);
+          --sv-accent: #60a5fa;
+        }
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--sv-bg);
+        color: var(--sv-fg);
+        font: 13px/1.55 -apple-system, "Segoe UI", "Microsoft YaHei UI", sans-serif;
+      }
+      body {
+        padding: 14px;
+        box-sizing: border-box;
+      }
+      .wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 760px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 650;
+      }
+      .sub {
+        margin: -6px 0 0;
+        color: var(--sv-muted);
+        font-size: 12px;
+      }
+      .card {
+        border: 1px solid var(--sv-border);
+        background: var(--sv-surface);
+        border-radius: var(--sv-radius);
+        padding: 12px 14px;
+      }
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: 12px;
+        font-weight: 650;
+        color: var(--sv-muted);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+      }
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 5px 0;
+      }
+      th {
+        width: 126px;
+        color: var(--sv-muted);
+        font-weight: 500;
+        padding-right: 12px;
+      }
+      code {
+        font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+        font-size: 12px;
+        background: color-mix(in srgb, var(--sv-fg) 8%, transparent);
+        border-radius: 4px;
+        padding: 1px 5px;
+        word-break: break-all;
+      }
+      ol {
+        margin: 0;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      ol li::marker {
+        color: var(--sv-muted);
+      }
+      .note {
+        margin: 0;
+        color: var(--sv-muted);
+        font-size: 12px;
+      }
+      .note + .note {
+        margin-top: 6px;
+      }
+      .accent {
+        color: var(--sv-accent);
+      }
+      .footer {
+        color: var(--sv-muted);
+        font-size: 11.5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>SenseVoice STT 本地服务</h1>
+      <p class="sub">
+        使用 cc-haha 已下载的 SenseVoice Small (INT8) 模型，提供 OpenAI 兼容的本地转写接口。
+      </p>
+
+      <div class="card">
+        <h2>OpenChamber 设置</h2>
+        <table>
+          <tr>
+            <th>模式</th>
+            <td>服务器（OpenAI 兼容）</td>
+          </tr>
+          <tr>
+            <th>服务器地址</th>
+            <td><code>http://127.0.0.1:47831</code></td>
+          </tr>
+          <tr>
+            <th>模型</th>
+            <td><code>sensevoice</code>（任意非空值均可）</td>
+          </tr>
+          <tr>
+            <th>端点路径</th>
+            <td>保持默认 <code>/audio/transcriptions</code>，或填 <code>/v1/audio/transcriptions</code></td>
+          </tr>
+          <tr>
+            <th>API Key</th>
+            <td>留空即可</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>启用步骤</h2>
+        <ol>
+          <li>打开 <span class="accent">设置 → 语音 / 听写</span>，把识别方式切到“服务器”。</li>
+          <li>按上表填写地址、模型和端点。</li>
+          <li>首次听写时服务会加载模型（约 2–3 秒），之后直接复用。</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2>运行说明</h2>
+        <p class="note">
+          本扩展注册了 <code>service.keepRunning</code>，随 OpenChamber 启动并常驻；空闲 5 分钟后会卸载模型释放内存，下次听写自动重载。
+        </p>
+        <p class="note">
+          模型以 NTFS 硬链接放进扩展数据目录（同一磁盘时不额外占用空间）；sherpa-onnx 运行时首次会复制约 23 MB。因此 cc-haha 没有启动、甚至卸载后，本服务仍可独立工作。
+        </p>
+        <p class="note">
+          可与 cc-haha 同时使用：两边各自加载一份模型，互不干扰，只是内存与 CPU 各占一份。
+        </p>
+        <p class="note">
+          状态接口：<code>http://127.0.0.1:47831/status</code>（仅本机可访问）。
+        </p>
+      </div>
+
+      <div class="footer">
+        可选配置：<code>%USERPROFILE%\.config\openchamber\guest-data\sensevoice-stt\config.json</code>，
+        支持 <code>port</code>、<code>modelDir</code>、<code>sherpaRuntime</code>、
+        <code>threads</code>、<code>language</code>、<code>idleUnloadMs</code>。
+        例如端口冲突时写入 <code>{"port": 47832}</code>，并同步修改上面的服务器地址。
+      </div>
+    </div>
+  </body>
+</html>
